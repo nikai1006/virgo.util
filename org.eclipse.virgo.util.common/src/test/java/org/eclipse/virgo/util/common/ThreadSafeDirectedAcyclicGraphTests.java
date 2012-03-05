@@ -23,7 +23,7 @@ import java.util.concurrent.CyclicBarrier;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ThreadSafeAcyclicDirectedGraphTests {
+public class ThreadSafeDirectedAcyclicGraphTests {
 
     private DirectedAcyclicGraph<String> graph;
 
