@@ -8,6 +8,7 @@
  * Contributors:
  *   VMware Inc. - initial contribution (ThreadSafeArrayListTreeTests.java)
  *   EclipseSource - reworked from generic tree to DAG (Bug 358697)
+ *   EclipseSource - removed internal root node list from TSDAG (Bug 369907)
  *******************************************************************************/
 
 package org.eclipse.virgo.util.common;
