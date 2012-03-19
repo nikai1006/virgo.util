@@ -33,6 +33,14 @@ public class ThreadSafeDirectedAcyclicGraph<V> implements DirectedAcyclicGraph<V
 
     private final Object monitor = new Object();
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ThreadSafeGraphNode<V> createNode(V value) {
+        return new ThreadSafeGraphNode<V>(value, this.monitor);
+    }
+
     private static final Object tieMonitor = new Object();
 
     private final List<ThreadSafeGraphNode<V>> nodes = new ArrayList<ThreadSafeGraphNode<V>>();

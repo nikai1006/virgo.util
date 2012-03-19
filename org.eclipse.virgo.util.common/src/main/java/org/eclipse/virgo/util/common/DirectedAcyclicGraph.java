@@ -31,12 +31,21 @@ import java.util.List;
 public interface DirectedAcyclicGraph<V> {
 
     /**
+     * Create a new {@link GraphNode} for this {@link DirectedAcyclicGraph}. The value is not copied.
+     * 
+     * @param value of the node to create
+     * @return a node with the given value
+     */
+    GraphNode<V> createNode(V value);
+
+    /**
      * Create a new {@link GraphNode} and add it to this {@link DirectedAcyclicGraph}'s root nodes. The value is not
      * copied.
      * 
      * @param value of the node to create
      * @return a node with the given value
      */
+    @Deprecated
     GraphNode<V> createRootNode(V value);
 
     /**
@@ -52,6 +61,7 @@ public interface DirectedAcyclicGraph<V> {
      * @return <code>true</code> if the node was removed successfully, otherwise <code>false</code>.
      * @see java.util.List#remove
      */
+    @Deprecated
     boolean deleteRootNode(GraphNode<V> node);
 
     /**
@@ -60,6 +70,7 @@ public interface DirectedAcyclicGraph<V> {
      * 
      * @return this graph's root nodes
      */
+    @Deprecated
     List<GraphNode<V>> getRootNodes();
 
 }
