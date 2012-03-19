@@ -52,31 +52,31 @@ public class ThreadSafeGraphNodeTests {
     }
 
     private GraphNode<String> buildTestGraphAndReturnRootNode(DirectedAcyclicGraph<String> graph, String rootValue) {
-        GraphNode<String> top = graph.createRootNode(rootValue);
+        GraphNode<String> top = graph.createNode(rootValue);
 
         // shared nodes
-        GraphNode<String> lo = graph.createRootNode("Lo");
-        GraphNode<String> fi = graph.createRootNode("Fi");
+        GraphNode<String> lo = graph.createNode("Lo");
+        GraphNode<String> fi = graph.createNode("Fi");
 
         // We.add(Pa)
-        top.addChild(graph.createRootNode("Pa"));
+        top.addChild(graph.createNode("Pa"));
         GraphNode<String> pa = top.getChildren().get(0);
         // Pa.add(Cr)
-        pa.addChild(graph.createRootNode("Cr"));
+        pa.addChild(graph.createNode("Cr"));
         GraphNode<String> cr = pa.getChildren().get(0);
-        cr.addChild(graph.createRootNode("B1"));
+        cr.addChild(graph.createNode("B1"));
         cr.addChild(lo);
         cr.addChild(fi);
 
         // Pa.add(Cu)
-        pa.addChild(graph.createRootNode("Cu"));
+        pa.addChild(graph.createNode("Cu"));
         GraphNode<String> cu = pa.getChildren().get(1);
-        cu.addChild(graph.createRootNode("B2"));
+        cu.addChild(graph.createNode("B2"));
         cu.addChild(lo);
         cu.addChild(fi);
 
         // Pa.add(B3)
-        pa.addChild(graph.createRootNode("B3"));
+        pa.addChild(graph.createNode("B3"));
         // Pa.add(Lo)
         pa.addChild(lo);
 
@@ -84,9 +84,9 @@ public class ThreadSafeGraphNodeTests {
     }
 
     private GraphNode<String> addFluffyToGraph(DirectedAcyclicGraph<String> graph) {
-        GraphNode<String> body = graph.createRootNode("Fluffy's body");
+        GraphNode<String> body = graph.createNode("Fluffy's body");
         for (int i = 0; i < 3; i++) {
-            GraphNode<String> head = graph.createRootNode("head " + i);
+            GraphNode<String> head = graph.createNode("head " + i);
             head.addChild(body);
         }
         return body;
@@ -96,7 +96,7 @@ public class ThreadSafeGraphNodeTests {
     public void testEmptyNode() throws Exception {
         DirectedAcyclicGraph<String> graph = new ThreadSafeDirectedAcyclicGraph<String>();
 
-        GraphNode<String> nullGraph = graph.createRootNode(null);
+        GraphNode<String> nullGraph = graph.createNode(null);
 
         assertNull(nullGraph.getValue());
         assertEquals("null<>", nullGraph.toString());
@@ -105,10 +105,10 @@ public class ThreadSafeGraphNodeTests {
     @Test
     public void testDepthTwo() throws Exception {
         DirectedAcyclicGraph<String> graph = new ThreadSafeDirectedAcyclicGraph<String>();
-        GraphNode<String> root = graph.createRootNode("root");
+        GraphNode<String> root = graph.createNode("root");
 
-        root.addChild(graph.createRootNode("C1"));
-        root.addChild(graph.createRootNode("C2"));
+        root.addChild(graph.createNode("C1"));
+        root.addChild(graph.createNode("C2"));
 
         assertEquals("root<C1<>, C2<>>", root.toString());
     }
@@ -116,9 +116,9 @@ public class ThreadSafeGraphNodeTests {
     @Test
     public void testDepthThree() throws Exception {
         DirectedAcyclicGraph<String> graph = new ThreadSafeDirectedAcyclicGraph<String>();
-        GraphNode<String> we = graph.createRootNode("We");
-        GraphNode<String> pa = graph.createRootNode("Pa");
-        GraphNode<String> cr = graph.createRootNode("Cr");
+        GraphNode<String> we = graph.createNode("We");
+        GraphNode<String> pa = graph.createNode("Pa");
+        GraphNode<String> cr = graph.createNode("Cr");
 
         we.addChild(pa);
         pa.addChild(cr);
@@ -130,7 +130,7 @@ public class ThreadSafeGraphNodeTests {
     public void testToString() {
         DirectedAcyclicGraph<String> graph = new ThreadSafeDirectedAcyclicGraph<String>();
 
-        assertEquals("null<>", graph.createRootNode(null).toString());
+        assertEquals("null<>", graph.createNode(null).toString());
 
         GraphNode<String> top = buildTestGraphAndReturnRootNode(graph);
 
@@ -140,13 +140,13 @@ public class ThreadSafeGraphNodeTests {
     @Test
     public void testHashCodeEquals() {
         DirectedAcyclicGraph<String> graphA = new ThreadSafeDirectedAcyclicGraph<String>();
-        GraphNode<String> topA = graphA.createRootNode("root");
+        GraphNode<String> topA = graphA.createNode("root");
 
         assertFalse(topA.equals(null));
         assertFalse(topA.equals(new Object()));
 
         DirectedAcyclicGraph<String> graphB = new ThreadSafeDirectedAcyclicGraph<String>();
-        GraphNode<String> topB = graphB.createRootNode("root");
+        GraphNode<String> topB = graphB.createNode("root");
 
         assertEquals(topA.hashCode(), topB.hashCode());
         assertEquals(topB.hashCode(), topA.hashCode());
@@ -154,7 +154,7 @@ public class ThreadSafeGraphNodeTests {
         assertEquals(topA, topB);
         assertEquals(topB, topA);
 
-        GraphNode<String> t1 = graphA.createRootNode("a");
+        GraphNode<String> t1 = graphA.createNode("a");
         {
             GraphNode<String> a = t1;
             assertFalse(topA.equals(a));
@@ -162,17 +162,17 @@ public class ThreadSafeGraphNodeTests {
         }
 
         {
-            GraphNode<String> a = graphA.createRootNode(null);
+            GraphNode<String> a = graphA.createNode(null);
             a.hashCode();
             assertFalse(topA.equals(a));
             assertFalse(a.equals(topA));
         }
 
-        assertTrue(graphA.createRootNode(null).equals(graphA.createRootNode(null)));
-        assertFalse(graphA.createRootNode(null).equals(graphA.createRootNode("a")));
-        assertFalse(graphA.createRootNode("a").equals(graphA.createRootNode(null)));
+        assertTrue(graphA.createNode(null).equals(graphA.createNode(null)));
+        assertFalse(graphA.createNode(null).equals(graphA.createNode("a")));
+        assertFalse(graphA.createNode("a").equals(graphA.createNode(null)));
 
-        GraphNode<String> t2 = graphA.createRootNode("b");
+        GraphNode<String> t2 = graphA.createNode("b");
         assertFalse(t1.equals(t2));
         assertFalse(t2.equals(t1));
     }
@@ -196,16 +196,16 @@ public class ThreadSafeGraphNodeTests {
     public void testSizeWithNullNodes() throws Exception {
         DirectedAcyclicGraph<String> graph = new ThreadSafeDirectedAcyclicGraph<String>();
 
-        GraphNode<String> graphWithNullNodes = graph.createRootNode("with null values");
+        GraphNode<String> graphWithNullNodes = graph.createNode("with null values");
         assertEquals(1, graphWithNullNodes.size());
 
-        graphWithNullNodes.addChild(graph.createRootNode("first"));
+        graphWithNullNodes.addChild(graph.createNode("first"));
         assertEquals(2, graphWithNullNodes.size());
 
-        graphWithNullNodes.addChild(graph.createRootNode(null));
+        graphWithNullNodes.addChild(graph.createNode(null));
         assertEquals(3, graphWithNullNodes.size());
 
-        graphWithNullNodes.addChild(graph.createRootNode("third"));
+        graphWithNullNodes.addChild(graph.createNode("third"));
         assertEquals(4, graphWithNullNodes.size());
     }
 
@@ -229,7 +229,7 @@ public class ThreadSafeGraphNodeTests {
 
         List<GraphNode<String>> children = top.getChildren();
         assertEquals(1, children.size());
-        GraphNode<String> newChild = graph.createRootNode("newChild");
+        GraphNode<String> newChild = graph.createNode("newChild");
 
         top.addChild(newChild);
         assertEquals(2, children.size());
@@ -240,7 +240,7 @@ public class ThreadSafeGraphNodeTests {
     public void testDAGWithNoChilds() throws Exception {
         DirectedAcyclicGraph<String> graph = new ThreadSafeDirectedAcyclicGraph<String>();
 
-        GraphNode<String> solo = graph.createRootNode("solo");
+        GraphNode<String> solo = graph.createNode("solo");
 
         assertNotNull(solo.getChildren());
         assertTrue(solo.getChildren().isEmpty());
@@ -251,19 +251,18 @@ public class ThreadSafeGraphNodeTests {
         DirectedAcyclicGraph<String> graph = new ThreadSafeDirectedAcyclicGraph<String>();
         GraphNode<String> child = new NoopGraphNode();
 
-        graph.createRootNode("foo").addChild(child);
+        graph.createNode("foo").addChild(child);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testDuplicateInsertionOfAChild() throws Exception {
         DirectedAcyclicGraph<String> graph = new ThreadSafeDirectedAcyclicGraph<String>();
-        buildTestGraphAndReturnRootNode(graph);
 
-        GraphNode<String> node = graph.getRootNodes().get(0);
-        GraphNode<String> child = graph.createRootNode("child");
+        GraphNode<String> rootNode = buildTestGraphAndReturnRootNode(graph);
+        GraphNode<String> child = graph.createNode("child");
 
-        node.addChild(child);
-        node.addChild(child);
+        rootNode.addChild(child);
+        rootNode.addChild(child);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -272,7 +271,7 @@ public class ThreadSafeGraphNodeTests {
         GraphNode<String> top = buildTestGraphAndReturnRootNode(graph);
 
         DirectedAcyclicGraph<String> secondGraph = new ThreadSafeDirectedAcyclicGraph<String>();
-        GraphNode<String> alienNode = secondGraph.createRootNode("alien");
+        GraphNode<String> alienNode = secondGraph.createNode("alien");
 
         top.addChild(alienNode);
     }
@@ -280,9 +279,9 @@ public class ThreadSafeGraphNodeTests {
     @Test
     public void testAddSharedChild() {
         DirectedAcyclicGraph<String> graph = new ThreadSafeDirectedAcyclicGraph<String>();
-        GraphNode<String> cr = graph.createRootNode("cr");
-        GraphNode<String> cu = graph.createRootNode("cu");
-        GraphNode<String> lo = graph.createRootNode("lo");
+        GraphNode<String> cr = graph.createNode("cr");
+        GraphNode<String> cu = graph.createNode("cu");
+        GraphNode<String> lo = graph.createNode("lo");
 
         cr.addChild(lo);
         cu.addChild(lo);
@@ -302,7 +301,7 @@ public class ThreadSafeGraphNodeTests {
         final int THREAD_COUNT = 150;
         final CyclicBarrier barrier = new CyclicBarrier(THREAD_COUNT + 1);
         final DirectedAcyclicGraph<String> graph = new ThreadSafeDirectedAcyclicGraph<String>();
-        final GraphNode<String> sharedChild = graph.createRootNode("shared child");
+        final GraphNode<String> sharedChild = graph.createNode("shared child");
 
         class AddChildThread extends Thread {
 
@@ -316,7 +315,7 @@ public class ThreadSafeGraphNodeTests {
             public void run() {
                 try {
                     barrier.await();
-                    GraphNode<String> root = graph.createRootNode("root" + this.counter);
+                    GraphNode<String> root = graph.createNode("root" + this.counter);
                     root.addChild(sharedChild);
                     barrier.await();
                 } catch (Exception e) {
@@ -383,7 +382,7 @@ public class ThreadSafeGraphNodeTests {
         DirectedAcyclicGraph<String> graph = new ThreadSafeDirectedAcyclicGraph<String>();
         GraphNode<String> child = new NoopGraphNode();
 
-        graph.createRootNode("foo").removeChild(child);
+        graph.createNode("foo").removeChild(child);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -392,7 +391,7 @@ public class ThreadSafeGraphNodeTests {
         GraphNode<String> top = buildTestGraphAndReturnRootNode(graph);
 
         DirectedAcyclicGraph<String> secondGraph = new ThreadSafeDirectedAcyclicGraph<String>();
-        GraphNode<String> alienNode = secondGraph.createRootNode("alien");
+        GraphNode<String> alienNode = secondGraph.createNode("alien");
 
         top.removeChild(alienNode);
     }
@@ -430,7 +429,7 @@ public class ThreadSafeGraphNodeTests {
         DirectedAcyclicGraph<String> graph = new ThreadSafeDirectedAcyclicGraph<String>();
 
         TestDirectedAcyclicGraphVisitor visitor = new TestDirectedAcyclicGraphVisitor();
-        GraphNode<String> t = graph.createRootNode("-");
+        GraphNode<String> t = graph.createNode("-");
         t.visit(visitor);
         List<String> visited = visitor.getVisited();
 
@@ -444,10 +443,10 @@ public class ThreadSafeGraphNodeTests {
         GraphNode<String> top = buildTestGraphAndReturnRootNode(graph);
 
         TestDirectedAcyclicGraphVisitor visitor = new TestDirectedAcyclicGraphVisitor();
-        top.addChild(graph.createRootNode("-"));
+        top.addChild(graph.createNode("-"));
         GraphNode<String> t = top.getChildren().get(1);
-        t.addChild(graph.createRootNode("foo"));
-        t.addChild(graph.createRootNode("bar"));
+        t.addChild(graph.createNode("foo"));
+        t.addChild(graph.createNode("bar"));
         assertEquals(12, top.size());
 
         top.visit(visitor);
@@ -471,7 +470,7 @@ public class ThreadSafeGraphNodeTests {
         DirectedAcyclicGraph<String> graph = new ThreadSafeDirectedAcyclicGraph<String>();
 
         TestExceptionThrowingDirectedAcyclicGraphVisitor visitor = new TestExceptionThrowingDirectedAcyclicGraphVisitor();
-        GraphNode<String> t = graph.createRootNode("-");
+        GraphNode<String> t = graph.createNode("-");
         t.visit(visitor);
 
         List<String> visited = visitor.getVisited();
@@ -485,10 +484,10 @@ public class ThreadSafeGraphNodeTests {
         GraphNode<String> top = buildTestGraphAndReturnRootNode(graph);
 
         TestExceptionThrowingDirectedAcyclicGraphVisitor visitor = new TestExceptionThrowingDirectedAcyclicGraphVisitor();
-        top.addChild(graph.createRootNode("-"));
+        top.addChild(graph.createNode("-"));
         GraphNode<String> t = top.getChildren().get(1);
-        t.addChild(graph.createRootNode("foo"));
-        t.addChild(graph.createRootNode("bar"));
+        t.addChild(graph.createNode("foo"));
+        t.addChild(graph.createNode("bar"));
         assertEquals(12, top.size());
 
         top.visit(visitor);
@@ -502,10 +501,10 @@ public class ThreadSafeGraphNodeTests {
         GraphNode<String> top = buildTestGraphAndReturnRootNode(graph);
 
         TestExceptionThrowingDirectedAcyclicGraphVisitor visitor = new TestExceptionThrowingDirectedAcyclicGraphVisitor();
-        top.addChild(graph.createRootNode("*"));
+        top.addChild(graph.createNode("*"));
         GraphNode<String> t = top.getChildren().get(1);
-        t.addChild(graph.createRootNode("foo"));
-        t.addChild(graph.createRootNode("bar"));
+        t.addChild(graph.createNode("foo"));
+        t.addChild(graph.createNode("bar"));
 
         assertEquals(12, top.size());
         try {

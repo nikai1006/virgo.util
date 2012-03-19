@@ -8,11 +8,10 @@
  * Contributors:
  *   VMware Inc. - initial contribution (Tree.java)
  *   EclipseSource - reworked from generic tree to DAG (Bug 358697)
+ *   EclipseSource - removed internal root node list (Bug 369907)
  *******************************************************************************/
 
 package org.eclipse.virgo.util.common;
-
-import java.util.List;
 
 /**
  * {@link DirectedAcyclicGraph} is a set of {@link GraphNode}s with a parent child relationship. The nodes are connected
@@ -37,40 +36,5 @@ public interface DirectedAcyclicGraph<V> {
      * @return a node with the given value
      */
     GraphNode<V> createNode(V value);
-
-    /**
-     * Create a new {@link GraphNode} and add it to this {@link DirectedAcyclicGraph}'s root nodes. The value is not
-     * copied.
-     * 
-     * @param value of the node to create
-     * @return a node with the given value
-     */
-    @Deprecated
-    GraphNode<V> createRootNode(V value);
-
-    /**
-     * Removes the occurrence of the given {@link GraphNode} from this {@link DirectedAcyclicGraph}'s root nodes.
-     * Returns <code>true</code> if the node was found and removed, otherwise <code>false</code>.
-     * 
-     * <strong>Note</strong>: Removal is only allowed if the root node has no children.
-     * 
-     * @param node the node to remove
-     * @throws IllegalArgumentException if the given node is not a root node (the node has one or more parents)
-     * @throws IllegalArgumentException if the given node has children
-     * @throws IllegalArgumentException if the given node does not belong to the same {@link DirectedAcyclicGraph}.
-     * @return <code>true</code> if the node was removed successfully, otherwise <code>false</code>.
-     * @see java.util.List#remove
-     */
-    @Deprecated
-    boolean deleteRootNode(GraphNode<V> node);
-
-    /**
-     * Returns a list of this {@link DirectedAcyclicGraph}'s root nodes (not copies of the nodes). If the graph has no
-     * root nodes (and is therefore empty), returns an empty list. Never returns <code>null</code>.
-     * 
-     * @return this graph's root nodes
-     */
-    @Deprecated
-    List<GraphNode<V>> getRootNodes();
 
 }
