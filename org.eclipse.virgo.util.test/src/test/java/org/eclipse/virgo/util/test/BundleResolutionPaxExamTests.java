@@ -47,6 +47,7 @@ public class BundleResolutionPaxExamTests {
     "org.eclipse.virgo.util.common", //
     "org.eclipse.virgo.util.env", //
     "org.eclipse.virgo.util.math", //
+    "org.eclipse.virgo.util.io", //
     };
 
     @Configuration

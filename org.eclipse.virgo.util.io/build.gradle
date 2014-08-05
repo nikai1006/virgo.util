@@ -1,0 +1,12 @@
+apply plugin: 'osgi'
+
+jar {
+    manifest {
+        version = project.version
+        name = 'Mathematical Utility Code'
+        instruction 'Import-Package', '*'
+        instruction 'Export-Package', '*'
+        attributes( 'Bundle-SymbolicName': 'org.eclipse.virgo.util.io')
+        attributes( 'Built-By': "Gradle ${gradle.gradleVersion}" )
+    }
+}
