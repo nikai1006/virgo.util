@@ -46,6 +46,7 @@ public class BundleResolutionPaxExamTests {
     private static String[] OSGI_BUNDLES = new String[] { //
     "org.eclipse.virgo.util.common", //
     "org.eclipse.virgo.util.env", //
+    "org.eclipse.virgo.util.math", //
     };
 
     @Configuration
