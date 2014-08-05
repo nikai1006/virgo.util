@@ -1,9 +1,5 @@
 apply plugin: 'osgi'
 
-// Bundle-ManifestVersion: 2
-// Bundle-Name: 
-// Bundle-SymbolicName: 
-// Bundle-Version: ${version}
 jar {
     manifest {
         version = project.version
