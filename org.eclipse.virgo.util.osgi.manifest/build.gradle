@@ -1,0 +1,12 @@
+apply plugin: 'osgi'
+
+jar {
+    manifest {
+        version = project.version
+        name = 'OSGi Manifest Utility Code'
+        instruction 'Import-Package', '*'
+        instruction 'Export-Package', '*'
+        attributes( 'Bundle-SymbolicName': 'org.eclipse.virgo.util.osgi.manifest')
+        attributes( 'Built-By': "Gradle ${gradle.gradleVersion}" )
+    }
+}
