@@ -29,7 +29,7 @@ public final class ServiceRegistrationTracker {
 
     private final Object monitor = new Object();
 
-    private Set<ServiceRegistration<?>> registrations;
+    private Set<ServiceRegistration> registrations;
 
     /**
      * Tracks the supplied {@link ServiceRegistration}. This <code>ServiceRegistration</code> will be
@@ -38,10 +38,10 @@ public final class ServiceRegistrationTracker {
      * 
      * @param registration the <code>ServiceRegistration</code> to track.
      */
-    public void track(ServiceRegistration<?> registration) {
+    public void track(ServiceRegistration registration) {
         synchronized (this.monitor) {
             if (this.registrations == null) {
-                this.registrations = new HashSet<ServiceRegistration<?>>();
+                this.registrations = new HashSet<ServiceRegistration>();
             }
             this.registrations.add(registration);
         }
@@ -50,7 +50,7 @@ public final class ServiceRegistrationTracker {
     /**
      * Safely unregisters a tracked <code>ServiceRegistration</code>.
      */
-    public void unregister(ServiceRegistration<?> registration) {
+    public void unregister(ServiceRegistration registration) {
         synchronized (this.monitor) {
             this.registrations.remove(registration);
         }
@@ -61,13 +61,13 @@ public final class ServiceRegistrationTracker {
      * Safely unregisters all the tracked <code>ServiceRegistrations</code>.
      */
     public void unregisterAll() {
-        Set<ServiceRegistration<?>> toUnregister = null;
+        Set<ServiceRegistration> toUnregister = null;
         synchronized (this.monitor) {
             toUnregister = this.registrations;
             this.registrations = null;
         }
         if (toUnregister != null) {
-            for (ServiceRegistration<?> serviceRegistration : toUnregister) {
+            for (ServiceRegistration serviceRegistration : toUnregister) {
                 serviceRegistration.unregister();
             }
         }

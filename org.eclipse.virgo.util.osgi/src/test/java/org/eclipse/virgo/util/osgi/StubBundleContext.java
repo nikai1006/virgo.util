@@ -77,22 +77,22 @@ public class StubBundleContext implements BundleContext {
         //System.out.println("5");
         return new Filter(){
 
-            public boolean match(ServiceReference<?> arg0) {
+            public boolean match(ServiceReference arg0) {
                 // TODO Auto-generated method stub
                 return true;
             }
 
-            public boolean match(Dictionary<String, ?> arg0) {
+            public boolean match(Dictionary arg0) {
                 // TODO Auto-generated method stub
                 return true;
             }
 
-            public boolean matchCase(Dictionary<String, ?> arg0) {
+            public boolean matchCase(Dictionary arg0) {
                 // TODO Auto-generated method stub
                 return true;
             }
 
-			public boolean matches(Map<String, ?> map) {
+			public boolean matches(Map map) {
 				// TODO Auto-generated method stub
 				return true;
 			}
@@ -103,7 +103,7 @@ public class StubBundleContext implements BundleContext {
     /** 
      * {@inheritDoc}
      */
-    public ServiceReference<?>[] getAllServiceReferences(String arg0, String arg1) throws InvalidSyntaxException {
+    public ServiceReference[] getAllServiceReferences(String arg0, String arg1) throws InvalidSyntaxException {
         //System.out.println("6");
         return null;
     }
@@ -152,15 +152,15 @@ public class StubBundleContext implements BundleContext {
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
-	public <S> S getService(ServiceReference<S> arg0) {
+	public ServiceObject getService(ServiceReference arg0) {
         //System.out.println("12");
-        return (S)new ServiceObject();
+        return new ServiceObject();
     }
 
     /** 
      * {@inheritDoc}
      */
-    public ServiceReference<?> getServiceReference(String arg0) {
+    public ServiceReference getServiceReference(String arg0) {
         //System.out.println("13");
         return null;
     }
@@ -168,10 +168,10 @@ public class StubBundleContext implements BundleContext {
     /** 
      * {@inheritDoc}
      */
-    public ServiceReference<?>[] getServiceReferences(String arg0, String arg1) throws InvalidSyntaxException {
+    public ServiceReference[] getServiceReferences(String arg0, String arg1) throws InvalidSyntaxException {
         //System.out.println("14");
-        ServiceReference<?>[] refs = new ServiceReference[1];
-        refs[0] = new ServiceReference<ServiceObject>(){
+        ServiceReference[] refs = new ServiceReference[1];
+        refs[0] = new ServiceReference(){
 
             public int compareTo(Object arg0) {
                 // TODO Auto-generated method stub
@@ -226,7 +226,7 @@ public class StubBundleContext implements BundleContext {
     /** 
      * {@inheritDoc}
      */
-    public ServiceRegistration<?> registerService(String[] arg0, Object arg1, Dictionary<String, ?> arg2) {
+    public ServiceRegistration registerService(String[] arg0, Object arg1, Dictionary arg2) {
         //System.out.println("17");
         return null;
     }
@@ -234,7 +234,7 @@ public class StubBundleContext implements BundleContext {
     /** 
      * {@inheritDoc}
      */
-    public ServiceRegistration<?> registerService(String arg0, Object arg1, Dictionary<String, ?> arg2) {
+    public ServiceRegistration registerService(String arg0, Object arg1, Dictionary arg2) {
         //System.out.println("18");
         return null;
     }
@@ -263,7 +263,7 @@ public class StubBundleContext implements BundleContext {
     /** 
      * {@inheritDoc}
      */
-    public boolean ungetService(ServiceReference<?> arg0) {
+    public boolean ungetService(ServiceReference arg0) {
         //System.out.println("22");
         return true;
     }
@@ -278,26 +278,24 @@ public class StubBundleContext implements BundleContext {
 	/**
 	 * {@inheritDoc}
 	 */
-	public <S> ServiceReference<S> getServiceReference(Class<S> clazz) {
+	public ServiceReference getServiceReference(Class clazz) {
 		return null;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public <S> Collection<ServiceReference<S>> getServiceReferences(
-			Class<S> clazz, String filter) throws InvalidSyntaxException {
+	public Collection<ServiceReference> getServiceReferences(
+			Class clazz, String filter) throws InvalidSyntaxException {
 		return null;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public <S> ServiceRegistration<S> registerService(Class<S> clazz,
-			S service, Dictionary<String, ?> properties) {
+	public  ServiceRegistration registerService(Class clazz,
+			Object service, Dictionary properties) {
 		return null;
 	}
-    
-    
 
 }

@@ -21,7 +21,7 @@ public class ServiceRegistrationTrackerTests {
 
     @Test
     public void testTrackAndUnregister() {
-        ServiceRegistration<?> registration = createServiceRegistration();
+        ServiceRegistration registration = createServiceRegistration();
 
         replay(registration);
 
@@ -34,8 +34,8 @@ public class ServiceRegistrationTrackerTests {
 
     @Test
     public void testTrackAndUnregisterAll() {
-        ServiceRegistration<?> registration1 = createServiceRegistration();
-        ServiceRegistration<?> registration2 = createServiceRegistration();
+        ServiceRegistration registration1 = createServiceRegistration();
+        ServiceRegistration registration2 = createServiceRegistration();
         replay(registration1, registration2);
 
         ServiceRegistrationTracker tracker = new ServiceRegistrationTracker();
@@ -46,8 +46,8 @@ public class ServiceRegistrationTrackerTests {
         verify(registration1, registration2);
     }
 
-    private ServiceRegistration<?> createServiceRegistration() {
-        ServiceRegistration<?> registration = createMock(ServiceRegistration.class);
+    private ServiceRegistration createServiceRegistration() {
+        ServiceRegistration registration = createMock(ServiceRegistration.class);
         registration.unregister();
         expectLastCall();
         return registration;
