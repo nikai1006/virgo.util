@@ -15,6 +15,8 @@ package org.eclipse.virgo.util.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.ops4j.pax.exam.CoreOptions.bundle;
+import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
+import static org.ops4j.pax.exam.CoreOptions.wrappedBundle;
 import static org.ops4j.pax.exam.CoreOptions.junitBundles;
 import static org.ops4j.pax.exam.CoreOptions.options;
 
@@ -51,6 +53,7 @@ public class BundleResolutionPaxExamTests {
     "org.eclipse.virgo.util.parser.manifest", //
     "org.eclipse.virgo.util.osgi", //
     "org.eclipse.virgo.util.osgi.manifest", //
+    "org.eclipse.virgo.util.jmx", //
     };
 
     @Configuration
@@ -90,6 +93,9 @@ public class BundleResolutionPaxExamTests {
         return options( //
             bundle("mvn:org.slf4j/slf4j-api/1.7.2"), // CQ3991 (using Orbit CQ3680)
             bundle("mvn:org.slf4j/slf4j-nop/1.7.2").noStart(), // CQ3990
+            wrappedBundle(bundle("mvn:org.aspectj/aspectjweaver/1.6.12"))
+                .bundleSymbolicName("org.aspectj.weaver")
+                .bundleVersion("1.6.12"),
             utilBundles, //
             junitBundles() //
         );
@@ -102,13 +108,16 @@ public class BundleResolutionPaxExamTests {
         for (Bundle bundle : bundles) {
             String symbolicName = bundle.getSymbolicName();
             System.out.println(symbolicName);
-            if (symbolicName.contains(BASE_PACKAGE)) {
+            if (symbolicName.contains(BASE_PACKAGE) && bundle.getState() != Bundle.ACTIVE) {
+                System.out.println("Failed to start bundle: " + bundle);
                 Dictionary<String, String> headers = bundle.getHeaders();
                 Enumeration<String> elements = headers.keys();
                 while (elements.hasMoreElements()) {
                     String key = elements.nextElement();
                     System.out.println(key + ": " + headers.get(key));
                 }
+                System.out.println("Starting to make problem visible in stacktrace...");
+                bundle.start();
             }
             if (symbolicName.contains(BASE_PACKAGE)) {
                 found++;

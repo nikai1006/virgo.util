@@ -1,0 +1,69 @@
+apply plugin: 'osgi'
+
+jar {
+    manifest {
+        version = project.version
+        name = 'JMX Utility Code'
+        instruction 'Import-Package', '*'
+        instruction 'Export-Package', '*'
+        attributes( 'Bundle-SymbolicName': 'org.eclipse.virgo.util.jmx')
+        attributes( 'Built-By': "Gradle ${gradle.gradleVersion}" )
+    }
+}
+
+configurations {
+    tools
+    aspects
+    ajInpath
+}
+
+def aspectjVersion = "1.8.1"
+
+dependencies {
+    tools "org.aspectj:aspectjtools:$aspectjVersion"
+    compile "org.aspectj:aspectjrt:$aspectjVersion"
+    compile("cglib:cglib:2.2.2") { exclude group: 'asm' } // cglib 2.2.2 depends on asm 3.3
+    compile 'org.ow2.asm:asm:5.0.3'
+    compile 'org.ow2.asm:asm-tree:5.0.3'
+}
+
+compileJava.deleteAllActions()
+
+task aspectJ(dependsOn: JavaPlugin.PROCESS_RESOURCES_TASK_NAME) {
+    dependsOn configurations.tools.getTaskDependencyFromProjectDependency(true, "compileJava")
+    def srcDirs = sourceSets.main.java.srcDirs
+    srcDirs.each { inputs.dir it }
+    def destDir = sourceSets.main.output.classesDir
+    outputs.dir destDir
+    doLast {
+        ant.taskdef(
+            resource: "org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties",
+            classpath: configurations.tools.asPath
+        )
+// TODO - translate the "old" command
+//		<iajc inPath="${test.output.dir}" aspectPathRef="test.aspect.path" classpathRef="test.compile.classpath"
+//				destDir="${test.output.dir}" source="${source.version}" checkRuntimeVersion="false" X="${aspectj.x}"/>
+        ant.iajc(
+            source:sourceCompatibility,
+            target:targetCompatibility,
+            destDir: destDir.absolutePath,
+            maxmem:"512m",
+            fork:"true",
+            verbose: "true",
+            showWeaveInfo: "true",
+			aspectPath: configurations.aspects.asPath,
+			inpath:configurations.ajInpath.asPath,
+			sourceRootCopyFilter:"**/.svn/*,**/*.java",
+			classpath:configurations.compile.asPath
+        )
+        {
+            sourceroots {
+                srcDirs.each {
+                    if (it.exists()) pathelement location: it.absolutePath
+                }
+            }
+        }
+    }
+}
+
+compileJava.dependsOn aspectJ
