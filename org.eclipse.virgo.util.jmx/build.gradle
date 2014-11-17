@@ -10,9 +10,3 @@ jar {
         attributes( 'Built-By': "Gradle ${gradle.gradleVersion}" )
     }
 }
-
-apply plugin: 'aspectj'
-
-compileAspect {
-     additionalAjcArgs = ['source' : '1.8', 'debug' : '', 'X' : 'noInline', 'preserveAllLocals' : '']
-}
