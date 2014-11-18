@@ -3,7 +3,7 @@ apply plugin: 'osgi'
 jar {
     manifest {
         version = project.version
-        name = 'Mathematical Utility Code'
+        name = 'IO Utility Code'
         instruction 'Import-Package', '*'
         instruction 'Export-Package', '*'
         attributes( 'Bundle-SymbolicName': 'org.eclipse.virgo.util.io')
