@@ -15,10 +15,9 @@ package org.eclipse.virgo.util.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.ops4j.pax.exam.CoreOptions.bundle;
-import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
-import static org.ops4j.pax.exam.CoreOptions.wrappedBundle;
 import static org.ops4j.pax.exam.CoreOptions.junitBundles;
 import static org.ops4j.pax.exam.CoreOptions.options;
+import static org.ops4j.pax.exam.CoreOptions.wrappedBundle;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -38,7 +37,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
 @RunWith(PaxExam.class)
-public class BundleResolutionPaxExamTests {
+public class UtilBundlesResolutionPaxExamTests {
 
     private static final String BASE_PACKAGE = "org.eclipse.virgo";
 
