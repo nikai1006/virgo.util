@@ -1,6 +1,42 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+ext.utilBundlorProjects = [
+    project(':util:org.eclipse.virgo.util.common'),
+    project(':util:org.eclipse.virgo.util.env'),
+    project(':util:org.eclipse.virgo.util.io'),
+    project(':util:org.eclipse.virgo.util.jmx'),
+    project(':util:org.eclipse.virgo.util.math'),
+    project(':util:org.eclipse.virgo.util.osgi'),
+    project(':util:org.eclipse.virgo.util.osgi.manifest'),
+    project(':util:org.eclipse.virgo.util.parser.launcher'),
+    project(':util:org.eclipse.virgo.util.parser.manifest'),
+]
+
+configure(utilBundlorProjects) {
+    apply plugin: 'bundlor'
+
+    task('addProjectVersionToGradlePropertiesTask', type: Copy) {
+        ext.outputDir = new File(buildDir, 'bundlor-properties')
+        inputs.file project.rootProject.file('gradle.properties')
+        outputs.dir ext.outputDir
+        from project.rootProject.file('gradle.properties')
+        into ext.outputDir
+        filter(ReplaceTokens, tokens: [
+            'VIRGO.VERSION': version,
+        ])
+    }
+
+    project.tasks.'bundlor'.dependsOn('addProjectVersionToGradlePropertiesTask')
+
+    bundlor {
+        manifestTemplatePath = "template.mf"
+        propertiesPath = new File("${project.buildDir}/bundlor-properties/gradle.properties")
+    }
+}
+
 project(':util:org.eclipse.virgo.util.common') {
     dependencies {
-		testCompile group: 'org.easymock', name: 'easymock', version: easymockVersion
+        testCompile group: 'org.easymock', name: 'easymock', version: easymockVersion
     }
 }
 
@@ -21,8 +57,8 @@ project(':util:org.eclipse.virgo.util.jmx') {
 
 project(':util:org.eclipse.virgo.util.osgi') {
     dependencies {
-		testCompile group: 'org.easymock', name: 'easymock', version: easymockVersion
-    
+        testCompile group: 'org.easymock', name: 'easymock', version: easymockVersion
+
         compile group: "org.eclipse.virgo.mirrored", name: "org.eclipse.osgi", version: equinoxVersion, configuration: "compile", ext: "jar"
 
         compile project(':util:org.eclipse.virgo.util.common')
