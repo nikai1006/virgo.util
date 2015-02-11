@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 import static org.ops4j.pax.exam.CoreOptions.bundle;
 import static org.ops4j.pax.exam.CoreOptions.junitBundles;
 import static org.ops4j.pax.exam.CoreOptions.options;
-import static org.ops4j.pax.exam.CoreOptions.wrappedBundle;
+import static org.ops4j.pax.exam.CoreOptions.repositories;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -46,13 +46,13 @@ public class UtilBundlesResolutionPaxExamTests {
 
     private static String[] OSGI_BUNDLES = new String[] { //
     "org.eclipse.virgo.util.common", //
-    "org.eclipse.virgo.util.env", //
-    "org.eclipse.virgo.util.math", //
-    "org.eclipse.virgo.util.io", //
-    "org.eclipse.virgo.util.parser.manifest", //
-    "org.eclipse.virgo.util.osgi", //
-    "org.eclipse.virgo.util.osgi.manifest", //
-    "org.eclipse.virgo.util.jmx", //
+        "org.eclipse.virgo.util.env", //
+        "org.eclipse.virgo.util.io", //
+        "org.eclipse.virgo.util.jmx", //
+        "org.eclipse.virgo.util.math", //
+        "org.eclipse.virgo.util.osgi", //
+        "org.eclipse.virgo.util.osgi.manifest", //
+        "org.eclipse.virgo.util.parser.manifest", //
     };
 
     @Configuration
@@ -90,11 +90,10 @@ public class UtilBundlesResolutionPaxExamTests {
             }
         };
         return options( //
-            bundle("mvn:org.slf4j/slf4j-api/1.7.2"), // CQ3991 (using Orbit CQ3680)
-            bundle("mvn:org.slf4j/slf4j-nop/1.7.2").noStart(), // CQ3990
-            wrappedBundle(bundle("mvn:org.aspectj/aspectjweaver/1.6.12"))
-                .bundleSymbolicName("org.aspectj.weaver")
-                .bundleVersion("1.6.12"),
+            repositories("http://repository.springsource.com/maven/bundles/release"), //
+            bundle("mvn:org.slf4j/slf4j-api/1.7.2"), // CQ 3991 (using Orbit CQ3680)
+            bundle("mvn:org.slf4j/slf4j-nop/1.7.2").noStart(), // CQ 3990
+            bundle("mvn:org.aspectj/com.springsource.org.aspectj.runtime/1.6.12.RELEASE"),//
             utilBundles, //
             junitBundles() //
         );
@@ -106,17 +105,20 @@ public class UtilBundlesResolutionPaxExamTests {
         Bundle[] bundles = this.bundleContext.getBundles();
         for (Bundle bundle : bundles) {
             String symbolicName = bundle.getSymbolicName();
-            System.out.println(symbolicName);
+            System.out.println("Testing bundle state for '" + symbolicName + "'..." + bundle.getState());
             if (symbolicName.contains(BASE_PACKAGE) && bundle.getState() != Bundle.ACTIVE) {
-                System.out.println("Failed to start bundle: " + bundle);
+                System.out.println("Non *ACTIVE* bundle found: '" + bundle + "'");
                 Dictionary<String, String> headers = bundle.getHeaders();
                 Enumeration<String> elements = headers.keys();
                 while (elements.hasMoreElements()) {
                     String key = elements.nextElement();
                     System.out.println(key + ": " + headers.get(key));
                 }
-                System.out.println("Starting to make problem visible in stacktrace...");
-                bundle.start();
+                if (bundle.getHeaders().get("Fragment-Host") == null) {
+                    System.out.println("Starting *inactive* bundle to make problem visible...");
+                    // do not try to start fragment bundles
+                    bundle.start();
+                }
             }
             if (symbolicName.contains(BASE_PACKAGE)) {
                 found++;
