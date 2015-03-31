@@ -31,7 +31,7 @@ import org.junit.Test;
  */
 public class FileSystemCheckerTests {
 
-    private final File checkDir = new File("target", "work");
+    private final File checkDir = new File("build", "work");
 
     @Before
     public void createDir() {
