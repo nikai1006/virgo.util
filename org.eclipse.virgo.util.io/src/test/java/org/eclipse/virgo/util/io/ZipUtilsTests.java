@@ -163,7 +163,8 @@ public class ZipUtilsTests {
     	PathReference unzipDestination = new PathReference("build/unzipDestructive");
     	PathReference archivedFile = new PathReference("build/unzipDestructive/test.txt");
     	PathReference archivedFileInMetaInf = new PathReference("build/unzipDestructive/META-INF/test.txt");
-    	
+
+    	unzipDestination.delete(true);
     	ZipUtils.unzipTo(archiveToUnzip, unzipDestination);
     	
     	Assert.assertTrue(archivedFile.exists());
@@ -186,6 +187,8 @@ public class ZipUtilsTests {
     	PathReference archiveToUnzip = new PathReference("src/test/resources/jars/test.jar");
     	PathReference unzipDestination = new PathReference("build/unzipDestructiveLongFilePaths");
     	PathReference longFileNameDestination = longPathReference(unzipDestination, LONG_FILE_PATH_DEPTH);
+
+        unzipDestination.delete(true);
     	ZipUtils.unzipTo(archiveToUnzip, longFileNameDestination);
     	
     	PathReference archivedFile = longFileNameDestination.newChild("test.txt");
