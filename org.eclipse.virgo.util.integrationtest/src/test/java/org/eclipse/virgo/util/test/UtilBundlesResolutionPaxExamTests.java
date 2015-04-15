@@ -90,10 +90,10 @@ public class UtilBundlesResolutionPaxExamTests {
             }
         };
         return options( //
-            repositories("http://repository.springsource.com/maven/bundles/release"), //
+            repositories("http://repository.springsource.com/maven/bundles/external"), //
             bundle("mvn:org.slf4j/slf4j-api/1.7.2"), // CQ 3991 (using Orbit CQ3680)
             bundle("mvn:org.slf4j/slf4j-nop/1.7.2").noStart(), // CQ 3990
-            bundle("mvn:org.aspectj/com.springsource.org.aspectj.runtime/1.6.8.RELEASE"),//
+            bundle("mvn:org.aspectj/com.springsource.org.aspectj.runtime/1.6.12.RELEASE"), //
             utilBundles, //
             junitBundles() //
         );
