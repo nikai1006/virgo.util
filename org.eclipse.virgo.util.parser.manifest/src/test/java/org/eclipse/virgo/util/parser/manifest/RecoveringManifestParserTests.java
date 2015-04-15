@@ -364,11 +364,11 @@ public class RecoveringManifestParserTests extends TestCase {
 
 	private Reader readFromJar(String manifestName) {
 
-		ZipFile manifestTestDataZip;
+		try (ZipFile zipFile = new ZipFile("build/resources/test/manifests.zip")) {
 
-		try {
+			ZipFile manifestTestDataZip;
 
-			manifestTestDataZip = new ZipFile("build/resources/test/manifests.zip");
+			manifestTestDataZip = zipFile;
 
 			ZipEntry manifestZipEntry = manifestTestDataZip.getEntry(manifestName);
 
